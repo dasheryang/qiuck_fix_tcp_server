@@ -49,6 +49,19 @@ public:
     return socket_;
   }
 
+  void test_fix_msg(){
+	std::string file("./fix.cfg");
+	Application application;
+    FIX::FileStoreFactory storeFactory( settings );
+    FIX::ScreenLogFactory logFactory( settings );
+    FIX::SocketInitiator initiator( application, storeFactory, settings, logFactory );
+
+    initiator.start();
+	application.test();
+	initiator.stop();
+
+  }
+
   void start()
   {
     socket_.async_read_some(boost::asio::buffer(data_, max_length),
@@ -66,6 +79,8 @@ private:
                 std::cout << "parse error\n" << _j_reader.getFormattedErrorMessages();
                 return;
         }
+
+	test_fix_msg();
 
 	const Json::Value _j_keys = _j_root["k_set"];
 	const Json::Value _j_vals = _j_root["v_set"];
