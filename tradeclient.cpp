@@ -59,7 +59,7 @@ int main( int argc, char** argv )
     initiator.start();
     application.run();
     
-    initiator.stop();
+initiator.stop();
 
     return 0;
   }

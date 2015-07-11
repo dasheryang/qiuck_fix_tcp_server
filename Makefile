@@ -8,6 +8,6 @@ trclient: Application.h Application.cpp tradeclient.cpp
 
 
 clean: 
-	rm fix_tcp_server
-	rm fix_client
+	rm -rf fix_tcp_server
+	rm  -rf fix_client
 
