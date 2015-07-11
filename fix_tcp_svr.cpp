@@ -50,16 +50,6 @@ public:
   }
 
   void test_fix_msg(){
-	std::string file("./fix.cfg");
-	Application application;
-    FIX::FileStoreFactory storeFactory( settings );
-    FIX::ScreenLogFactory logFactory( settings );
-    FIX::SocketInitiator initiator( application, storeFactory, settings, logFactory );
-
-    initiator.start();
-	application.test();
-	initiator.stop();
-
   }
 
   void start()
@@ -207,6 +197,20 @@ int main(int argc, char* argv[])
 
     using namespace std; // For atoi.
     server s(io_service, atoi(argv[1]));
+
+
+        std::string file("./fix.cfg");
+        FIX::SessionSettings settings( file );
+        Application application;
+    FIX::FileStoreFactory storeFactory( settings );
+    FIX::ScreenLogFactory logFactory( settings );
+    FIX::SocketInitiator initiator( application, storeFactory, settings, logFactory );
+
+    initiator.start();
+	application.testOrderEntry();
+
+    initiator.stop();
+
 
     io_service.run();
   }
