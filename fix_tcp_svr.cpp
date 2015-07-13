@@ -64,9 +64,13 @@ public:
         int h_keys[] = {8, 49, 56, 35};
         string h_vals[] = {"FIX.4.2", "GOLDMF", "KGITEST", "1"};
 
+<<<<<<< HEAD
         int m_keys[] = {112};
         string m_vals[] = {"heart beat test string"};
 */
+=======
+        fix_app_.sendMessage( 4, h_keys, h_vals, 9, m_keys, m_vals );
+>>>>>>> 4413ea796005bfed01fc70f5c124de65ca27e579
 
         fix_app_.sendMessage( h_keys, h_vals, m_keys, m_vals );
       }catch (std::exception& e){
@@ -84,26 +88,37 @@ public:
 
 private:
   void parse_input( std::string json_str ){
-	Json::Value _j_root;
-        Json::Reader _j_reader;
-        bool ret_j_parse = _j_reader.parse( json_str, _j_root );
+	Json::Value j_root;
+        Json::Reader j_reader;
+        bool ret_j_parse = j_reader.parse( json_str, j_root );
         if( !ret_j_parse ){
-                std::cout << "parse error\n" << _j_reader.getFormattedErrorMessages();
+                std::cout << "parse error\n" << j_reader.getFormattedErrorMessages();
                 return;
         }
+	
+	const Json::Value j_head_keys = j_root["head_keys"];
+	const Json::Value j_head_vals = j_root["head_vals"];
+	const Json::Value j_body_keys = j_root["body_vals"];
+	const Json::Value j_body_vals = j_root["body_vals"];
 
-
-	const Json::Value _j_keys = _j_root["k_set"];
-	const Json::Value _j_vals = _j_root["v_set"];
-	for( int i = 0; i < _j_keys.size(); ++i ){
-		int k = _j_keys[i].asInt();
-		std::string v = _j_vals[i].asString();
-		
-		std::cout << "get input: " << k << " = " << v << std::endl;
+	int h_size = j_head_keys.size();
+	int head_keys[h_size];
+	string head_vals[h_size];
+	for( int i = 0; i < h_size; ++i ){
+		head_keys[i]= j_head_keys[i].asInt();
+		head_vals[i] = j_head_vals[i].asString();
+	}
+	
+	int b_size = j_body_keys.size();
+	int body_keys[b_size];
+	string body_vals[b_size];
+	for ( int i =0; i < b_size; ++i ){
+		body_keys[i] = j_body_keys[i].asInt();
+		body_vals[i] = j_body_vals[i].asString();
 	}
 
         std::string out_str;
-        out_str = _j_root["out"].asString();
+        out_str = j_root["out"].asString();
         std::cout << "get output section as: " << out_str << std::endl;	  
 
   }

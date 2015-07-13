@@ -74,25 +74,21 @@ void Application::testOrderEntry()
   return;
 }
 
-
-void Application::sendMessage( int head_keys[], string head_vals[], 
-                                int msg_keys[], string msg_vals[]){
+void Application::sendMessage( int head_field_count, int head_keys[], string head_vals[],
+                int body_field_count, int body_keys[], string body_vals[]){
 
   std::cout << "\nTest send Message of GMF App\n";
-
   FIX::Message message;
 
-  int h_count = sizeof(head_keys) / sizeof(int);
-  for( int i = 0; i < h_count; i++ ){
+  for( int i = 0; i < head_field_count; i++ ){
       int k = head_keys[i];
       string v = head_vals[i];
       message.getHeader().setField( k, v.c_str() );
   }
 
-  int m_count = sizeof(msg_keys) / sizeof( int );
-  for( int i = 0; i < m_count; i++ ){
-    int k = msg_keys[i];
-    string v = msg_vals[i];
+  for( int i = 0; i < body_field_count; i++ ){
+    int k = body_keys[i];
+    string v = body_vals[i];
     message.setField( k, v.c_str() );
   }
 
