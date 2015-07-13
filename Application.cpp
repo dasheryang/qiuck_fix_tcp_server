@@ -29,7 +29,7 @@
 #include "quickfix/Session.h"
 #include <iostream>
 
-
+using namespace std;
 
 void Application::test()
 {
@@ -73,6 +73,31 @@ void Application::testOrderEntry()
   FIX::Session::sendToTarget( message );
   return;
 }
+
+
+void Application::sendMessage( int head_keys[], string head_vals[], 
+                                int msg_keys[], string msg_vals[]){
+
+  std::cout << "\nTest send Message of GMF App\n";
+
+  FIX::Message message;
+
+  int h_count = sizeof(head_keys) / sizeof(int);
+  for( int i = 0; i < h_count; i++ ){
+      int k = head_keys[i];
+      string v = head_vals[i];
+      message.getHeader().setField( k, v.c_str() );
+  }
+
+  int m_count = sizeof(msg_keys) / sizeof( int );
+  for( int i = 0; i < m_count; i++ ){
+    int k = msg_keys[i];
+    string v = msg_vals[i];
+    message.setField( k, v.c_str() );
+  }
+
+  FIX::Session::sendToTarget( message );
+};
 
 void Application::onLogon( const FIX::SessionID& sessionID )
 {
@@ -119,10 +144,20 @@ void Application::onMessage
 
 void Application::run()
 {
+
   while ( true )
   {
     try
     {
+   
+
+     std::cout << "press any key to start..." << std::endl;
+  char input_c;
+  std::cin >> input_c;
+
+  testOrderEntry();
+
+
       char action = queryAction();
 
       if( action == '0' ){

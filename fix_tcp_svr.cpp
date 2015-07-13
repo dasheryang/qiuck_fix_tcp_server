@@ -35,12 +35,14 @@
 
 
 using boost::asio::ip::tcp;
+using namespace std;
 
 class session
 {
 public:
-  session(boost::asio::io_service& io_service)
-    : socket_(io_service)
+  session(boost::asio::io_service& io_service, Application& app)
+    : socket_(io_service),
+      fix_app_(app)
   {
   }
 
@@ -50,6 +52,20 @@ public:
   }
 
   void test_fix_msg(){
+      try{
+        std::cout << "start fix message test in boost server" << std::endl;
+        // fix_app_.testOrderEntry();
+        int h_keys[] = {8  , 49, 56, 35};
+        string h_vals[] = {"FIX.4.2", "GOLDMF", "KGITEST", "D"};
+
+        int m_keys[] = {1, 11, 21, 38, 40, 44, 54, 55, 60};
+        string m_vals[] = {"9987", "1234567", "1", "1000", "7", "9,54", "1", "0700", "2015-07-09T01:08:18Z"};
+
+        fix_app_.sendMessage( h_keys, h_vals, m_keys, m_vals );
+
+      }catch (std::exception& e){
+        std::cout << "Message Not Sent: " << e.what();
+      }
   }
 
   void start()
@@ -70,7 +86,6 @@ private:
                 return;
         }
 
-	test_fix_msg();
 
 	const Json::Value _j_keys = _j_root["k_set"];
 	const Json::Value _j_vals = _j_root["v_set"];
@@ -88,31 +103,37 @@ private:
   }
 
   std::string pack_output(){
- 	Json::Value j_out;
-	j_out["ret"] = 0;
-	j_out["msg"] = "success";
+   	Json::Value j_out;
+  	j_out["ret"] = 0;
+  	j_out["msg"] = "success";
 
-	std::string str_out = j_out.toStyledString();
-	return str_out;	
+  	std::string str_out = j_out.toStyledString();
+  	return str_out;	
 	
   }
 
   void handle_read(const boost::system::error_code& error,
       size_t bytes_transferred)
   {
-	std::cout << "read complete\n";
+    std::cout << "read complete\n";
     if (!error)
     {
 	
-	std::string in_buf_str(data_);	
-	std::cout << "got data: " << in_buf_str << std::endl; 
-	
-	parse_input( in_buf_str );	
+    	std::string in_buf_str(data_);	
+    	std::cout << "got data: " << in_buf_str << std::endl; 
+    	
+    	parse_input( in_buf_str );	
 
-	const char res[max_length] = "fix reuslt\n";
-	size_t res_len = strlen(res);
-	
-	std::string str_out = pack_output();
+    	const char res[max_length] = "fix reuslt\n";
+    	size_t res_len = strlen(res);
+    	
+    	std::string str_out = pack_output();
+
+
+
+      test_fix_msg();
+//quickfix section
+
 
       boost::asio::async_write(socket_,
           boost::asio::buffer(str_out.c_str(), str_out.size() ),
@@ -143,14 +164,17 @@ private:
   tcp::socket socket_;
   enum { max_length = 1024 };
   char data_[max_length];
+
+  Application& fix_app_;
 };
 
 class server
 {
 public:
-  server(boost::asio::io_service& io_service, short port)
+  server(boost::asio::io_service& io_service, short port, Application& app)
     : io_service_(io_service),
-      acceptor_(io_service, tcp::endpoint(tcp::v4(), port))
+      acceptor_(io_service, tcp::endpoint(tcp::v4(), port)),
+      fix_app_(app)
   {
     start_accept();
   }
@@ -158,7 +182,7 @@ public:
 private:
   void start_accept()
   {
-    session* new_session = new session(io_service_);
+    session* new_session = new session(io_service_, fix_app_);
     acceptor_.async_accept(new_session->socket(),
         boost::bind(&server::handle_accept, this, new_session,
           boost::asio::placeholders::error));
@@ -181,12 +205,22 @@ private:
 
   boost::asio::io_service& io_service_;
   tcp::acceptor acceptor_;
+  Application& fix_app_;
 };
 
 int main(int argc, char* argv[])
 {
+  std::string file("./fix.cfg");
+  FIX::SessionSettings settings( file );
+  Application application;
+  FIX::FileStoreFactory storeFactory( settings );
+  FIX::ScreenLogFactory logFactory( settings );
+  FIX::SocketInitiator initiator( application, storeFactory, settings, logFactory );
+
   try
   {
+    initiator.start();
+
     if (argc != 2)
     {
       std::cerr << "Usage: async_tcp_echo_server <port>\n";
@@ -196,28 +230,17 @@ int main(int argc, char* argv[])
     boost::asio::io_service io_service;
 
     using namespace std; // For atoi.
-    server s(io_service, atoi(argv[1]));
-
-
-        std::string file("./fix.cfg");
-        FIX::SessionSettings settings( file );
-        Application application;
-    FIX::FileStoreFactory storeFactory( settings );
-    FIX::ScreenLogFactory logFactory( settings );
-    FIX::SocketInitiator initiator( application, storeFactory, settings, logFactory );
-
-    initiator.start();
-	application.testOrderEntry();
-
-    initiator.stop();
+    server s(io_service, atoi(argv[1]), application);
 
 
     io_service.run();
+
+    initiator.stop();
   }
   catch (std::exception& e)
   {
     std::cerr << "Exception: " << e.what() << "\n";
+    initiator.stop();
   }
-
   return 0;
 }

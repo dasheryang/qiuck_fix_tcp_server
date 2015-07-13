@@ -34,6 +34,9 @@
 #include "quickfix/fix42/OrderCancelReplaceRequest.h"
 
 #include <queue>
+#include <string.h>
+
+using namespace::std;
 
 class Application :
       public FIX::Application,
@@ -43,6 +46,8 @@ public:
   void run();
   void test();
   void testOrderEntry();
+
+  void sendMessage( int head_keys[], string head_vals[], int msg_keys[], string msg_vals[]);
 
 private:
   void onCreate( const FIX::SessionID& ) {}
