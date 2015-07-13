@@ -47,7 +47,8 @@ public:
   void test();
   void testOrderEntry();
 
-  void sendMessage( int head_keys[], string head_vals[], int msg_keys[], string msg_vals[]);
+  void sendMessage( int head_field_count, int head_keys[], string head_vals[], 
+		int body_field_count, int body_keys[], string body_vals[]);
 
 private:
   void onCreate( const FIX::SessionID& ) {}

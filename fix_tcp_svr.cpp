@@ -61,7 +61,7 @@ public:
         int m_keys[] = {1, 11, 21, 38, 40, 44, 54, 55, 60};
         string m_vals[] = {"9987", "1234567", "1", "1000", "7", "9,54", "1", "0700", "2015-07-09T01:08:18Z"};
 
-        fix_app_.sendMessage( h_keys, h_vals, m_keys, m_vals );
+        fix_app_.sendMessage( 4, h_keys, h_vals, 9, m_keys, m_vals );
 
       }catch (std::exception& e){
         std::cout << "Message Not Sent: " << e.what();
