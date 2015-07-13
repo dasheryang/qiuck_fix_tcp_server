@@ -6,7 +6,7 @@ if( false === $sock ){
         echo "sock create error!\n";
 }
 
-$address = '192.168.0.21';
+$address = 'localhost';
 $port = 51003;
 $result = socket_connect($sock, $address, $port);
 if ($result === false) {
@@ -19,9 +19,11 @@ if ($result === false) {
 
 $json_dat = array(
         'in' => 'test in',
-        'k_set' => array(93, 94, 95),
-        'v_set' => array('v93', 'v94', 'v95'),
-        'out' => 'test out',
+        'head_keys' => array(8 , 49, 56, 35 ),
+        'head_vals' => array( "FIX.4.2", "GOLDMF", "KGITEST", "D" ),
+        'body_keys' => array( 1, 11, 21, 38, 40, 44, 54, 55, 60 ),
+	'body_vals' => array( "9987", "1234567", "1", "1000", "7", "9,54", "1", "0700", "2015-07-09T01:08:18Z" ),
+	'out' => 'test out',
 );
 
 $in_str = json_encode( $json_dat );

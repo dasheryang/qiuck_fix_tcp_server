@@ -58,7 +58,7 @@ void Application::testOrderEntry()
   message.getHeader().setField(56, "KGITEST");
   message.getHeader().setField(35, "D");
 
-  message.setField(1, "9987"),		//account
+  message.setField(1, "acc in App"),		//account
   message.setField(11, "1234567"),	//ClOrdID
   message.setField(21, "1"),		//HandInst
   message.setField(38, "1000"),		//OrderQty

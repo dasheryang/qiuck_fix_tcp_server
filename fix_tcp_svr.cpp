@@ -54,15 +54,21 @@ public:
   void test_fix_msg(){
       try{
         std::cout << "start fix message test in boost server" << std::endl;
-        // fix_app_.testOrderEntry();
+        fix_app_.testOrderEntry();
         int h_keys[] = {8  , 49, 56, 35};
         string h_vals[] = {"FIX.4.2", "GOLDMF", "KGITEST", "D"};
 
         int m_keys[] = {1, 11, 21, 38, 40, 44, 54, 55, 60};
-        string m_vals[] = {"9987", "1234567", "1", "1000", "7", "9,54", "1", "0700", "2015-07-09T01:08:18Z"};
+        string m_vals[] = {"acc in Main", "1234567", "1", "1000", "7", "9,54", "1", "0700", "2015-07-09T01:08:18Z"};
+/**
+        int h_keys[] = {8, 49, 56, 35};
+        string h_vals[] = {"FIX.4.2", "GOLDMF", "KGITEST", "1"};
+
+        int m_keys[] = {112};
+        string m_vals[] = {"heart beat test string"};
+*/
 
         fix_app_.sendMessage( h_keys, h_vals, m_keys, m_vals );
-
       }catch (std::exception& e){
         std::cout << "Message Not Sent: " << e.what();
       }
@@ -115,7 +121,6 @@ private:
   void handle_read(const boost::system::error_code& error,
       size_t bytes_transferred)
   {
-    std::cout << "read complete\n";
     if (!error)
     {
 	
@@ -220,6 +225,8 @@ int main(int argc, char* argv[])
   try
   {
     initiator.start();
+
+//	application.run();
 
     if (argc != 2)
     {
