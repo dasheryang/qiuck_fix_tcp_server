@@ -98,6 +98,7 @@ void Application::sendMessage( int head_field_count, int head_keys[], string hea
 void Application::onLogon( const FIX::SessionID& sessionID )
 {
   std::cout << std::endl << "Logon - " << sessionID << std::endl;
+  redis_cli_.command( "SET", "fix app logon", "a" );
 }
 
 void Application::onLogout( const FIX::SessionID& sessionID )

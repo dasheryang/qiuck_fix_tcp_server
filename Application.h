@@ -36,6 +36,10 @@
 #include <queue>
 #include <string.h>
 
+
+//redis client lib section
+#include "redissyncclient.h"
+
 using namespace::std;
 
 class Application :
@@ -43,6 +47,9 @@ class Application :
       public FIX::MessageCracker
 {
 public:
+  Application(RedisSyncClient& redis_client)
+    : redis_cli_(redis_client)
+  {}
   void run();
   void test();
   void testOrderEntry();
@@ -66,6 +73,8 @@ private:
   void onMessage( const FIX42::OrderCancelReject&, const FIX::SessionID& );
 
   char queryAction();
+
+  RedisSyncClient& redis_cli_;
 };
 
 #endif
