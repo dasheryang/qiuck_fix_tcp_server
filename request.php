@@ -22,7 +22,7 @@ $json_dat = array(
         'head_keys' => array(8 , 49, 56, 35 ),
         'head_vals' => array( "FIX.4.2", "GOLDMF", "KGITEST", "D" ),
         'body_keys' => array( 1, 11, 21, 38, 40, 44, 54, 55, 60 ),
-	'body_vals' => array( "9987", "1234567", "1", "1000", "7", "9,54", "1", "0700", "2015-07-09T01:08:18Z" ),
+	'body_vals' => array( "ACCOUNTPHP", "1234567", "1", "1000", "7", "9,54", "1", "0700", "2015-07-09T01:08:18Z" ),
 	'out' => 'test out',
 );
 

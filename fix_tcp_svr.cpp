@@ -43,8 +43,7 @@ public:
   session(boost::asio::io_service& io_service, Application& app)
     : socket_(io_service),
       fix_app_(app)
-  {
-  }
+  {}
 
   tcp::socket& socket()
   {
@@ -64,15 +63,11 @@ public:
         int h_keys[] = {8, 49, 56, 35};
         string h_vals[] = {"FIX.4.2", "GOLDMF", "KGITEST", "1"};
 
-<<<<<<< HEAD
         int m_keys[] = {112};
         string m_vals[] = {"heart beat test string"};
 */
-=======
         fix_app_.sendMessage( 4, h_keys, h_vals, 9, m_keys, m_vals );
->>>>>>> 4413ea796005bfed01fc70f5c124de65ca27e579
 
-        fix_app_.sendMessage( h_keys, h_vals, m_keys, m_vals );
       }catch (std::exception& e){
         std::cout << "Message Not Sent: " << e.what();
       }
@@ -88,6 +83,7 @@ public:
 
 private:
   void parse_input( std::string json_str ){
+	try{
 	Json::Value j_root;
         Json::Reader j_reader;
         bool ret_j_parse = j_reader.parse( json_str, j_root );
@@ -98,7 +94,7 @@ private:
 	
 	const Json::Value j_head_keys = j_root["head_keys"];
 	const Json::Value j_head_vals = j_root["head_vals"];
-	const Json::Value j_body_keys = j_root["body_vals"];
+	const Json::Value j_body_keys = j_root["body_keys"];
 	const Json::Value j_body_vals = j_root["body_vals"];
 
 	int h_size = j_head_keys.size();
@@ -117,10 +113,13 @@ private:
 		body_vals[i] = j_body_vals[i].asString();
 	}
 
-        std::string out_str;
-        out_str = j_root["out"].asString();
-        std::cout << "get output section as: " << out_str << std::endl;	  
 
+	fix_app_.sendMessage( h_size, head_keys, head_vals, 
+				b_size, body_keys, body_vals );
+	
+      	}catch (std::exception& e){
+        	std::cout << "Message Not Sent: " << e.what();
+      	}
   }
 
   std::string pack_output(){
@@ -142,17 +141,12 @@ private:
     	std::string in_buf_str(data_);	
     	std::cout << "got data: " << in_buf_str << std::endl; 
     	
+//	process input string 
     	parse_input( in_buf_str );	
-
-    	const char res[max_length] = "fix reuslt\n";
-    	size_t res_len = strlen(res);
     	
     	std::string str_out = pack_output();
 
-
-
-      test_fix_msg();
-//quickfix section
+//      test_fix_msg();
 
 
       boost::asio::async_write(socket_,
