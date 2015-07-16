@@ -96,9 +96,13 @@ function xml2arr( $xml_obj ){
 
 
 function main(){
-    $cl_order_id = "1234567";
+    $cl_order_id = "1234569";
     echo "start client test... \n";
-//  send_order_request( $cl_order_id );
+	send_order_request( $cl_order_id );
+
+	echo "wait for response...\n";
+	sleep(2);
+	echo "order status info:\n";
     retrive_order_report( $cl_order_id );
     echo "end client test...\n";
 }
