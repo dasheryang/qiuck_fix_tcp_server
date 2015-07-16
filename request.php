@@ -10,7 +10,7 @@ $address = 'localhost';
 $port = 51003;
 $result = socket_connect($sock, $address, $port);
 if ($result === false) {
-    echo "socket_connect() failed.\nReason: ($result) " . socket_strerror(socket_last_error($sock)) . "\n";
+    echo "socket_connect() failed.\nReason: " . socket_strerror(socket_last_error($sock)) . "\n";
     return;
 } else {
     echo "OK.\n";

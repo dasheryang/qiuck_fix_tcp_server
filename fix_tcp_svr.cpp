@@ -262,7 +262,6 @@ int main(int argc, char* argv[])
     }
     server s(io_service, atoi(config_set[GMF_CONFIG_APP_SERVER_PORT].c_str()), application);
 
-
     std::string redis_err_msg;  
     if( !redis.connect( redis_address, redis_port, redis_err_msg) ){
         std::cout <<  "Can't connect to redis: " << redis_err_msg << std::endl;
