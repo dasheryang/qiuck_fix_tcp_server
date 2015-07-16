@@ -44,7 +44,6 @@ function send_order_request( $cl_order_id ){
     socket_close( $sock );
 }
 
-
 function retrive_order_report( $cl_order_id ){
     $redis_svr = new Redis();
     $redis_svr->connect( "127.0.0.1", 6379 );
@@ -79,9 +78,6 @@ function parse_report_field_map_from_xml( $xml_string ){
         'trailer' => $trailer_map,
     );
     var_dump( $map_pack );
-
-
-    // var_dump( "header", $header_map, "body", $body_map, "trailer", $trailer_map );
 }
 
 

@@ -129,13 +129,19 @@ throw( FIX::DoNotSend )
 }
 
 void Application::onMessage
-( const FIX42::ExecutionReport&, const FIX::SessionID& ) {
-	std::cout << std::endl << "exe report" << std::endl;
+( const FIX42::ExecutionReport& report, const FIX::SessionID& ) {
+	string msg_key = report.getField(11);
+	string redis_key = "FIX_EXE_" + msg_key;
+	string redis_val = report.toXML();
+	redis_cli_.command( "SET", redis_key.c_str(), redis_val.c_str() );
+
+	std::cout << std::endl << "execution report" << std::endl;
+		
 }
 
 
 void Application::onMessage
-( const FIX42::OrderCancelReject&, const FIX::SessionID& ) {
+( const FIX42::OrderCancelReject& report, const FIX::SessionID& ) {
 	std::cout << std::endl << "reject cancel report" << std::endl;
 }
 
