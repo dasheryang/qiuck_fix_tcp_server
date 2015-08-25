@@ -51,7 +51,7 @@ public:
     : redis_cli_(redis_client)
   {}
   void run();
-  void test();
+  void resetSeq();
   void testOrderEntry();
 
   void sendMessage( int head_field_count, int head_keys[], string head_vals[], 

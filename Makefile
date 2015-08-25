@@ -1,6 +1,6 @@
 
-server: fix_tcp_svr.cpp jsoncpp.cpp Application.h Application.cpp
-	c++ -g -I /usr/local/boost/include/ -I /usr/local/quickfix/include/ -I/usr/local/redisclient/include/  fix_tcp_svr.cpp jsoncpp.cpp Application.h Application.cpp -L/usr/local/quickfix/lib/ -lquickfix -lpthread -std=c++0x  -o server /usr/local/boost/lib/libboost_system.a 
+kgi_plugin_fix_svr: fix_tcp_svr.cpp jsoncpp.cpp Application.h Application.cpp
+	c++ -g -I /usr/local/boost/include/ -I /usr/local/quickfix/include/ -I/usr/local/redisclient/include/  fix_tcp_svr.cpp jsoncpp.cpp Application.h Application.cpp -L/usr/local/quickfix/lib/ -lquickfix -lpthread -std=c++0x  -o kgi_plugin_fix_svr /usr/local/boost/lib/libboost_system.a 
 
 
 trclient: Application.h Application.cpp tradeclient.cpp
@@ -8,6 +8,6 @@ trclient: Application.h Application.cpp tradeclient.cpp
 
 
 clean: 
-	rm -rf server
+	rm -rf kgi_plugin_fix_svr
 	rm -rf trclient
 

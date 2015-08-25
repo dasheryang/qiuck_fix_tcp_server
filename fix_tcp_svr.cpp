@@ -232,7 +232,7 @@ int main(int argc, char* argv[])
 //	application.run();
 
     map<string, string> config_set;
-    GMFConfig gmf_config("./gmf_server.cfg");
+    GMFConfig gmf_config("/data/kgi/plugin_server/config/gmf_server.cfg");
     config_set = gmf_config.loadConfig();
 
 
@@ -249,12 +249,13 @@ int main(int argc, char* argv[])
     RedisSyncClient redis(io_service);
     
 
-    std::string file("./fix.cfg");
+    std::string file("/data/kgi/plugin_server/config/fix.cfg");
     FIX::SessionSettings settings( file );
     Application application(redis);
     FIX::FileStoreFactory storeFactory( settings );
     FIX::ScreenLogFactory logFactory( settings );
     FIX::SocketInitiator initiator( application, storeFactory, settings, logFactory );
+
 
     if( config_set[GMF_CONFIG_APP_SERVER_PORT].empty() ){
       std::cout << "app server config error." << std::endl;
@@ -275,6 +276,8 @@ int main(int argc, char* argv[])
     }
 
     initiator.start();
+    application.resetSeq();
+
 
     io_service.run();
     initiator.stop();

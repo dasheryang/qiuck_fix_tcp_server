@@ -31,25 +31,25 @@
 
 using namespace std;
 
-void Application::test()
+void Application::resetSeq()
 {
-  std::cout << "\nTest functoin here e\n";
+//  std::cout << "\nTest functoin here e\n";
 
   FIX::Message message;
   //  order = queryNewOrderSingle42();
   message.getHeader().setField(8, "FIX.4.2");
   message.getHeader().setField(49, "GOLDMF");
-  message.getHeader().setField(56, "KGITEST");
-  message.getHeader().setField(35, "1");
+  message.getHeader().setField(56, "KGI");
+  message.getHeader().setField(35, "4");
 
-  message.setField(112, "9987"),
+  message.setField(36, "1"),
   FIX::Session::sendToTarget( message );
   return;
 }
 
 void Application::testOrderEntry()
 {
-  std::cout << "\nTest Order Entry\n";
+//  std::cout << "\nTest Order Entry\n";
 
   FIX::Message message;
   //  order = queryNewOrderSingle42();
