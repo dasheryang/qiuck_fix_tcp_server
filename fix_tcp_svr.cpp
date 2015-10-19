@@ -278,7 +278,6 @@ int main(int argc, char* argv[])
     initiator.start();
     application.resetSeq();
 
-
     io_service.run();
     initiator.stop();
   }
