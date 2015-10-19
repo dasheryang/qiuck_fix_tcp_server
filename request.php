@@ -21,9 +21,9 @@ function send_order_request( $cl_order_id ){
     $json_dat = array(
             'in' => 'test in',
             'head_keys' => array(8 , 49, 56, 35 ),
-            'head_vals' => array( "FIX.4.2", "GOLDMF", "KGITEST", "D" ),
-            'body_keys' => array( 1, 11, 21, 38, 40, 44, 54, 55, 60 ),
-        'body_vals' => array( "ACCOUNTPHP", $cl_order_id, "1", "1000", "7", "9,54", "1", "0700", "2015-07-09T01:08:18Z" ),
+            'head_vals' => array( "FIX.4.2", "GOLDMF", "KGI", "4" ),
+            'body_keys' => array( 36 ),
+        'body_vals' => array( "1" ),
         'out' => 'test out',
     );
 
@@ -101,9 +101,9 @@ function main(){
 	send_order_request( $cl_order_id );
 
 	echo "wait for response...\n";
-	sleep(2);
+//	sleep(2);
 	echo "order status info:\n";
-    retrive_order_report( $cl_order_id );
+//    retrive_order_report( $cl_order_id );
     echo "end client test...\n";
 }
 
